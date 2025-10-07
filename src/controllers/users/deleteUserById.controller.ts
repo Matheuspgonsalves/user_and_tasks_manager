@@ -4,11 +4,11 @@ import { deleteUserById } from "./useCases/deleteUserById.useCase";
 export const deleteUserByIdController = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 
-  const user = await deleteUserById(id);
+  const userResult = await deleteUserById(id);
 
-  if (!user) {
-    return res.status(404).send({ message: "User not found" });
-  }
+  if (userResult.error === "User ID is required") return res.status(400).send({ message: userResult.error });
+  if (userResult.error === "User not found") return res.status(404).send({ message: userResult.error });
+  if (userResult.error) return res.status(500).send({ message: userResult.error });
 
-  return res.status(200).send({ message: "OK", user });
+  return res.status(200).send({ message: "OK", userResult });
 };

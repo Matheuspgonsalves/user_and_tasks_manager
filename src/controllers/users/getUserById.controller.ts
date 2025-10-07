@@ -4,11 +4,10 @@ import { findUserById } from "./useCases/getUserById.useCase";
 export const getUserByIdController = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 
-  const user = await findUserById(id);
+  const userResult = await findUserById(id);
 
-  if (!user) {
-    return res.status(404).send({ message: "User not found" });
-  }
+  if (userResult.error === "User ID is required") return res.status(400).send({ message: userResult.error });
+  if (userResult.error === "User not found") return res.status(404).send({ message: userResult.error });
 
-  return res.status(200).send({ message: "OK", user });
+  return res.status(200).send({ message: "OK", user: userResult.user });
 };

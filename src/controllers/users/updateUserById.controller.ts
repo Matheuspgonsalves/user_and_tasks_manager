@@ -20,14 +20,19 @@ export const updateUserByIdController = async (req: Request, res: Response) => {
       .send({ message: userValidation.error.details[0].message });
   }
 
-  const updateUser = await updateUserUseCase(body, userId);
+  const updateUserResult = await updateUserUseCase(body, userId);
 
-  if (!updateUser) {
-    return res.status(409).send({ message: "User not found" });
-  }
+  if (updateUserResult.error === "User ID is required")
+    return res.status(400).send({ message: updateUserResult.error });
+  if (updateUserResult.error === "User not found")
+    return res.status(404).send({ message: updateUserResult.error });
+  if (updateUserResult.error === "Email already in use by another user")
+    return res.status(409).send({ message: updateUserResult.error });
+  if (updateUserResult.error)
+    return res.status(400).send({ message: updateUserResult.error });
 
   return res.status(201).send({
     message: "User successfully updated",
-    user: updateUser,
+    user: updateUserResult,
   });
 };
