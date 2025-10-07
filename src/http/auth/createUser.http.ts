@@ -4,7 +4,7 @@ import { Users } from "../../interfaces/users.interface";
 import prisma from "../../configs/database";
 import bcrypt from "bcrypt";
 
-const registerSchema: Joi.Schema = Joi.object({
+const registerSchema: Joi.Schema<Users> = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
