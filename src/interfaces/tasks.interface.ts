@@ -1,6 +1,9 @@
+import { TaskStatus } from "@prisma/client";
+
 export interface Tasks {
   id: string;
   title: string;
   description: string;
-  status: string;
+  status: TaskStatus;
+  userId: string;
 }
