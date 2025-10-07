@@ -20,7 +20,7 @@ Permite o gerenciamento de usuários e tarefas, incluindo autenticação, criaç
 
 1. **Clone o repositório**
    ```bash
-   git clone git@github.com:Matheuspgonsalves/user_tasks_and_tasks_manager.git
+   git clone git@github.com:Matheuspgonsalves/user_and_tasks_manager.git
    cd user_tasks_and_tasks_manager
    ```
 
