@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Joi from "joi";
 import { Users } from "../../interfaces/users.interface";
-import { createUserUseCase } from "./useCases/createUser.useCase";
+import { updateUserUseCase } from "./useCases/updateUser.useCase";
 
 const registerSchema: Joi.Schema<Users> = Joi.object({
   name: Joi.string().required(),
@@ -9,8 +9,9 @@ const registerSchema: Joi.Schema<Users> = Joi.object({
   password: Joi.string().required(),
 });
 
-export const createUserController = async (req: Request, res: Response) => {
+export const updateUserByIdController = async (req: Request, res: Response) => {
   const body: Users = req.body;
+  const userId: string = req.params.id;
   const userValidation: any = registerSchema.validate(body);
 
   if (userValidation.error) {
@@ -19,14 +20,14 @@ export const createUserController = async (req: Request, res: Response) => {
       .send({ message: userValidation.error.details[0].message });
   }
 
-  const result = await createUserUseCase(body);
+  const updateUser = await updateUserUseCase(body, userId);
 
-  if (result.error) {
-    return res.status(409).send({ message: result.error });
+  if (!updateUser) {
+    return res.status(409).send({ message: "User not found" });
   }
 
   return res.status(201).send({
-    message: "User successfully created",
-    user: result.user,
+    message: "User successfully updated",
+    user: updateUser,
   });
 };
