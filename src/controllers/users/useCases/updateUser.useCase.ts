@@ -10,10 +10,10 @@ export const updateUserUseCase = async (data: Users, id: string) => {
   if (email !== undefined) updateData.email = email;
   if (password !== undefined) updateData.password = password;
 
-  const updateSupplier = await prisma.user.update({
+  const updateUser = await prisma.user.update({
     where: { id },
     data: updateData
   });
 
-  return { updated_user: updateSupplier };
+  return { updated_user: updateUser };
 }

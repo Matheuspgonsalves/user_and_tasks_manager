@@ -1,9 +1,7 @@
-import { Response } from "express";
-import JwtRequest from "../../interfaces/authRequest.interface";
-import { findUserById } from "./useCases/getUserById.useCase";
+import { Request, Response } from "express";
 import { deleteUserById } from "./useCases/deleteUserById.useCase";
 
-export const deleteUserByIdController = async (req: JwtRequest, res: Response) => {
+export const deleteUserByIdController = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 
   const user = await deleteUserById(id);
