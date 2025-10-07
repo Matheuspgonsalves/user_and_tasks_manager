@@ -19,14 +19,14 @@ export const createUserController = async (req: Request, res: Response) => {
       .send({ message: userValidation.error.details[0].message });
   }
 
-  const result = await createUserUseCase(body);
+  const createUserResult = await createUserUseCase(body);
 
-  if (result.error) {
-    return res.status(409).send({ message: result.error });
+  if (createUserResult.error) {
+    return res.status(409).send({ message: createUserResult.error });
   }
 
   return res.status(201).send({
     message: "User successfully created",
-    user: result.user,
+    user: createUserResult.user,
   });
 };

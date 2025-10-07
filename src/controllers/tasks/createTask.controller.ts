@@ -15,23 +15,33 @@ const taskRegisterSchema: Joi.Schema<Tasks> = Joi.object({
 
 export const createTaskController = async (req: Request, res: Response) => {
   const body: Tasks = req.body;
-  const userValidation: any = taskRegisterSchema.validate(body);
+  const taskValidation: any = taskRegisterSchema.validate(body);
 
-  if (userValidation.error) {
+  if (taskValidation.error) {
     return res
       .status(400)
-      .send({ message: userValidation.error.details[0].message });
+      .send({ message: taskValidation.error.details[0].message });
   }
 
-  const result = await createTaskUseCase(body);
+  const createTaskResult = await createTaskUseCase(body);
 
-  if (result.error === "User not found") return res.status(404).send({ message: `Error: ${result.error}` });
-  if (result.error === "Task with same title already existis") return res.status(409).send({ message: `Error: ${result.error}` });
-  if (result.error) return res.status(400).send({ message: `Error: ${result.error}` });
-  
+  if (createTaskResult.error === "User not found")
+    return res
+      .status(404)
+      .send({ message: `Error: ${createTaskResult.error}` });
+
+  if (createTaskResult.error === "Task with same title already existis")
+    return res
+      .status(409)
+      .send({ message: `Error: ${createTaskResult.error}` });
+
+  if (createTaskResult.error)
+    return res
+      .status(400)
+      .send({ message: `Error: ${createTaskResult.error}` });
 
   return res.status(201).send({
     message: "Task successfully created",
-    task: result.task,
+    task: createTaskResult.task,
   });
 };
